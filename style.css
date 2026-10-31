@@ -1,0 +1,261 @@
+/* 1. Design tokens
+   -------------------------------------------------------------------------- */
+:root {
+  --neutral-0: hsl(0, 0%, 100%);
+  --neutral-300: hsl(252, 6%, 83%);
+  --neutral-500: hsl(245, 15%, 58%);
+  --neutral-700: hsl(245, 19%, 35%);
+  --neutral-900: hsl(248, 70%, 10%);
+  --orange-500: hsl(7, 88%, 67%);
+  --orange-700: hsl(7, 71%, 60%);
+  --gradient-text: linear-gradient(90deg, hsl(7, 86%, 67%), hsl(0, 0%, 100%));
+
+  --glass-fill: linear-gradient(135deg, hsl(0 0% 100% / 0.16), hsl(0 0% 100% / 0.04));
+  --glass-border: hsl(0 0% 100% / 0.35);
+  --field-fill: hsl(0 0% 100% / 0.08);
+  --field-fill-active: hsl(0 0% 100% / 0.18);
+
+  --font-main: "Inconsolata", ui-monospace, "Courier New", monospace;
+  --fs-body: clamp(1.125rem, 1.05rem + 0.35vw, 1.25rem);
+  --fs-h1: clamp(1.75rem, 1rem + 3.6vw, 3.5rem);
+  --fs-h2: clamp(1.625rem, 1.2rem + 2vw, 2.5rem);
+  --fs-h3: clamp(1.25rem, 1.1rem + 0.8vw, 1.5rem);
+
+  --space-sm: clamp(0.75rem, 0.5rem + 1vw, 1rem);
+  --space-md: clamp(1.25rem, 0.9rem + 1.5vw, 2rem);
+  --space-lg: clamp(2.5rem, 1.5rem + 4vw, 5rem);
+  --radius-sm: 0.75rem;
+  --radius-lg: 1.25rem;
+}
+
+
+/* 2. Reset and base styles
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+:where(body, h1, h2, h3, p, ul, ol, dl, dd) { margin: 0; }
+:where(ul, ol) { padding: 0; list-style: none; }
+:where(img) { display: block; max-width: 100%; height: auto; }
+:where(button, input) { font: inherit; color: inherit; }
+
+body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  font-family: var(--font-main);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  color: var(--neutral-300);
+  background: url("../assets/pattern-lines.svg") center top / cover no-repeat,
+              var(--neutral-900) url("../assets/background-mobile.png") center top / cover no-repeat;
+}
+
+:is(h1, h2, h3) { color: var(--neutral-0); font-weight: 800; line-height: 1.15; }
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); }
+h3 { font-size: var(--fs-h3); }
+a { color: inherit; }
+
+:where(a, .button, .card, .field__input, .dropzone, .dropzone__action) {
+  transition: 0.2s ease;
+  transition-property: color, background-color, border-color, box-shadow, transform;
+}
+
+:is(a, button, input):focus-visible,
+.dropzone:has(:focus-visible) {
+  outline: 3px solid var(--neutral-0);
+  outline-offset: 3px;
+}
+
+.gradient-text {
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+
+/* 3. Layout helpers
+   -------------------------------------------------------------------------- */
+.container { width: min(100% - 2rem, 72rem); margin-inline: auto; }
+.page-main { position: relative; flex: 1; isolation: isolate; overflow-x: hidden; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; white-space: nowrap; }
+
+.skip-link {
+  position: absolute; top: 0.5rem; left: 0.5rem; z-index: 10;
+  padding: 0.5rem 1rem; border-radius: var(--radius-sm);
+  background: var(--neutral-0); color: var(--neutral-900); font-weight: 700;
+}
+.skip-link:not(:focus-visible) { transform: translateY(-200%); }
+
+
+/* 4. Decorative background patterns
+   -------------------------------------------------------------------------- */
+:is(body, .page-main)::before,
+:is(body, .page-main)::after {
+  content: ""; position: absolute; background-repeat: no-repeat; background-size: contain; pointer-events: none;
+}
+body::before {
+  top: clamp(2.5rem, 7vw, 5.25rem); right: 0;
+  width: clamp(8rem, 40vw, 27.875rem); height: clamp(3.7rem, 18.7vw, 13rem);
+  background-image: url("../assets/pattern-squiggly-line-top.svg"); background-position: right top;
+}
+body::after {
+  bottom: 0; left: 0; width: min(100%, 38rem); height: min(70vw, 26.5rem);
+  background-image: url("../assets/pattern-squiggly-line-bottom-mobile-tablet.svg"); background-position: left bottom;
+}
+.page-main::before, .page-main::after {
+  z-index: -1; width: clamp(8rem, 15vw, 13.5625rem); height: clamp(8rem, 15vw, 13.5625rem);
+  background-image: url("../assets/pattern-circle.svg"); background-position: center;
+}
+.page-main::before { top: -9rem; left: 3%; }
+.page-main::after { top: 22rem; right: 8%; }
+
+
+/* 5. Header, navigation and footer
+   -------------------------------------------------------------------------- */
+:is(.site-header, .site-footer) { position: relative; z-index: 1; }
+:is(.site-header__inner, .site-footer__inner) {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm) var(--space-md); padding-block: var(--space-md);
+}
+.site-header__inner { justify-content: space-between; }
+.site-header__inner:has(> .brand:only-child) { justify-content: center; padding-block-end: 0; }
+.site-footer__inner { justify-content: center; font-size: 1rem; text-align: center; }
+
+.site-nav ul { display: flex; flex-wrap: wrap; gap: var(--space-sm) var(--space-md); }
+.site-nav a { padding-block: 0.25rem; text-decoration: none; border-bottom: 2px solid transparent; }
+.site-nav a:is(:hover, :focus-visible, [aria-current="page"]) { color: var(--neutral-0); border-color: var(--orange-500); }
+
+
+/* 6. Buttons and glass surfaces
+   -------------------------------------------------------------------------- */
+.button {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 0.875rem 1.75rem; border: 2px solid transparent; border-radius: var(--radius-sm);
+  background: var(--orange-500); color: var(--neutral-900); font-size: 1.25rem; font-weight: 800; text-decoration: none; cursor: pointer;
+}
+.form .button { width: 100%; }
+.button:not(.button--ghost):is(:hover, :focus-visible) { background: var(--orange-700); box-shadow: 0 4px 0 hsl(7 60% 48%); }
+.button--ghost { background: transparent; border-color: var(--neutral-300); color: var(--neutral-0); }
+.button--ghost:is(:hover, :focus-visible) { background: var(--field-fill-active); }
+
+.glass {
+  background: var(--glass-fill); border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.35), 0 1rem 2.5rem hsl(248 70% 4% / 0.45);
+}
+
+
+/* 7. Landing page (index.html)
+   -------------------------------------------------------------------------- */
+:is(.hero, .section, .form-page, .ticket-view) {
+  display: grid; justify-items: center; gap: var(--space-md); padding-block: var(--space-lg); text-align: center;
+}
+:is(.form-page, .ticket-view) { padding-block-start: var(--space-md); }
+:is(.hero, .form-page, .ticket-view) h1 { max-width: 30ch; }
+:is(.hero, .section) > p { max-width: 40rem; }
+
+.facts { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-sm) var(--space-lg); padding: var(--space-sm) var(--space-md); }
+.facts dt { font-size: 1rem; }
+.facts dd { color: var(--neutral-0); font-size: var(--fs-h3); font-weight: 700; }
+
+.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: var(--space-md); width: 100%; text-align: left; }
+.card { display: grid; align-content: start; gap: 0.5rem; padding: var(--space-md); }
+.card:is(:hover, :focus-within) { transform: translateY(-4px); border-color: var(--orange-500); }
+
+.agenda { display: grid; width: min(100%, 44rem); padding: 0 var(--space-md); text-align: left; }
+.agenda li { display: grid; grid-template-columns: minmax(5.5rem, 8rem) 1fr; gap: var(--space-sm); padding-block: var(--space-sm); }
+.agenda li:not(:first-child) { border-top: 1px solid var(--glass-border); }
+.agenda time { color: var(--orange-500); font-weight: 700; }
+
+
+/* 8. Registration form (login.html)
+   -------------------------------------------------------------------------- */
+.form { display: grid; gap: var(--space-md); width: min(100%, 28.75rem); text-align: left; }
+.field { display: grid; gap: 0.5rem; }
+.field__label { color: var(--neutral-0); font-size: 1.25rem; }
+
+:is(.field__input, .dropzone, .dropzone__action) { background: var(--field-fill); }
+:is(.field__input, .dropzone__action):is(:hover, :focus-visible),
+.dropzone:is(:hover, :has(:focus-visible)) { background: var(--field-fill-active); }
+
+:is(.field__input, .dropzone) { border: 1px solid var(--neutral-500); border-radius: var(--radius-sm); }
+.field__input { width: 100%; padding: 0.875rem 1rem; color: var(--neutral-0); }
+.field__input::placeholder { color: var(--neutral-300); }
+.field:has([aria-invalid="true"]) :is(.field__input, .dropzone) { border-color: var(--orange-500); }
+
+.field__message { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; }
+.field__message[id$="-error"] { color: var(--orange-500); }
+
+.dropzone { position: relative; display: grid; justify-items: center; gap: 0.75rem; padding: var(--space-sm); border-style: dashed; text-align: center; }
+.dropzone__input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.dropzone__icon { display: grid; place-items: center; width: 3.125rem; height: 3.125rem; overflow: hidden; border: 1px solid var(--neutral-700); border-radius: var(--radius-sm); }
+.dropzone__preview { width: 100%; height: 100%; object-fit: cover; }
+.dropzone__actions { position: relative; z-index: 1; display: flex; gap: 0.5rem; }
+.dropzone__action { padding: 0.125rem 0.5rem; border: 0; border-radius: 0.25rem; font-size: 0.8125rem; cursor: pointer; text-decoration: underline; }
+.form__status { min-height: 1.5em; color: var(--orange-500); font-size: 1rem; }
+
+
+/* 9. Ticket page (ticket.html)
+   -------------------------------------------------------------------------- */
+.ticket-view > p { max-width: 28rem; color: var(--neutral-0); }
+.ticket-view strong { color: var(--orange-500); font-weight: 400; overflow-wrap: anywhere; }
+.ticket-stage { width: min(100%, 37.5rem); margin-block: var(--space-md); }
+
+.ticket {
+  --ticket-pad: clamp(1rem, 4%, 1.5rem);
+  --logo-width: clamp(9rem, 28vw, 16.75rem);
+  --avatar-size: clamp(2.75rem, -0.5rem + 11vw, 5rem);
+  position: relative; display: flex; min-height: clamp(9.5rem, 43vw, 17.5rem); border-radius: 0.75rem;
+  background: url("../assets/pattern-ticket.svg") center / 100% 100% no-repeat;
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); text-align: left;
+  animation: ticket-in 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.ticket::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(115deg, transparent 40%, hsl(0 0% 100% / 0.2) 50%, transparent 60%) 150% 0 / 250% 100% no-repeat;
+  pointer-events: none; animation: ticket-sheen 1.4s ease-out 0.7s both;
+}
+.ticket__body {
+  display: flex; flex: 1; flex-direction: column; justify-content: space-between; gap: var(--space-sm);
+  min-width: 0; padding: var(--ticket-pad) 21% var(--ticket-pad) var(--ticket-pad);
+}
+.ticket__logo { width: var(--logo-width); }
+.ticket__meta { margin-top: 0.25rem; padding-inline-start: calc(var(--logo-width) * 0.225); color: var(--neutral-300); font-size: clamp(0.8125rem, 0.6rem + 0.6vw, 1rem); }
+
+:is(.ticket__holder, .ticket__who) { overflow: hidden; }
+.ticket__avatar { float: inline-start; width: var(--avatar-size); height: var(--avatar-size); margin-inline-end: clamp(0.625rem, 2vw, 1rem); border-radius: 0.5rem; object-fit: cover; }
+.ticket__who { padding-block-start: max(0px, calc((var(--avatar-size) - 3.5rem) / 2)); }
+.ticket__name { color: var(--neutral-0); font-size: clamp(1.125rem, 0.6rem + 1.8vw, 1.75rem); font-weight: 500; line-height: 1.2; }
+.ticket__github { display: inline-flex; align-items: center; gap: 0.5rem; font-size: clamp(0.875rem, 0.6rem + 0.8vw, 1.125rem); text-decoration: none; }
+.ticket__github:is(:hover, :focus-visible) { color: var(--neutral-0); text-decoration: underline; }
+:is(.ticket__name, .ticket__github) { overflow-wrap: anywhere; }
+
+.ticket__serial { position: absolute; top: 0; right: 0; bottom: 0; width: 18.9%; font-size: clamp(1.125rem, 0.7rem + 1.8vw, 1.75rem); letter-spacing: 0.05em; }
+.ticket__serial span { position: absolute; top: 50%; left: 50%; white-space: nowrap; transform: translate(-50%, -50%) rotate(90deg); }
+
+@keyframes ticket-in { from { opacity: 0; transform: translateY(1.5rem) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes ticket-sheen { from { background-position: 150% 0; } to { background-position: -50% 0; } }
+
+
+/* 10. Responsive breakpoints
+   -------------------------------------------------------------------------- */
+@media (width >= 48rem) {
+  body { background-image: url("../assets/pattern-lines.svg"), url("../assets/background-tablet.png"); }
+}
+@media (width >= 75rem) {
+  body { background-image: url("../assets/pattern-lines.svg"), url("../assets/background-desktop.png"); }
+  body::after { width: min(60%, 51.5625rem); height: min(29vw, 25rem); background-image: url("../assets/pattern-squiggly-line-bottom-desktop.svg"); }
+}
+
+
+/* 11. Motion preferences
+   -------------------------------------------------------------------------- */
+[hidden] { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms; }
+  .ticket, .ticket::after { animation: none; }
+}
