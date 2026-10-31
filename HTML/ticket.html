@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    ticket.html - Confirmation page showing the glassmorphism conference ticket.
+    All personal values are injected at runtime by js/ticket.js from localStorage.
+    Visitors without saved data are redirected to index.html.
+  -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Your personalised Coding Conf 2026 ticket.">
+  <title>Your Ticket | Coding Conf 2026</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;500;700;800&display=swap">
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/ticket.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- Site header and primary navigation -->
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="index.html">
+        <img src="../assets/logo-full.svg" alt="Coding Conf, home" width="209" height="30">
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#schedule">Schedule</a></li>
+          <li><a href="login.html">Register</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hidden until ticket.js has confirmed saved registration data exists -->
+  <main id="main" class="page-main" hidden>
+    <section class="container ticket-view" aria-labelledby="ticket-title">
+      <h1 id="ticket-title" class="gradient-text">Congrats, <span id="heading-name">Attendee</span>! Your ticket is ready.</h1>
+      <p class="ticket-view__lead">We will send your ticket and event updates to <strong id="ticket-email">your email address</strong>.</p>
+
+      <div class="ticket-stage">
+        <article class="ticket glass" aria-labelledby="ticket-card-title">
+          <h2 id="ticket-card-title" class="visually-hidden">Your Coding Conf 2026 ticket</h2>
+
+          <div class="ticket__body">
+            <div class="ticket__event">
+              <img class="ticket__logo" src="../assets/logo-full.svg" alt="Coding Conf" width="209" height="30">
+              <p class="ticket__meta"><time datetime="2026-10-26">Oct 26, 2026</time> <span aria-hidden="true">/</span> Papine, Kgn</p>
+            </div>
+
+            <!-- Attendee block: avatar floats left, name and GitHub sit beside it -->
+            <div class="ticket__holder">
+              <img id="ticket-avatar" class="ticket__avatar" src="../assets/image-avatar.jpg" alt="Attendee avatar" width="56" height="56">
+              <div class="ticket__who">
+                <p id="ticket-name" class="ticket__name">Attendee</p>
+                <a id="ticket-github" class="ticket__github" href="https://github.com/" target="_blank" rel="noopener noreferrer">
+                  <img src="../assets/icon-github.svg" alt="" width="22" height="23">
+                  <span id="ticket-github-text">@username</span>
+                  <span class="visually-hidden">(opens in a new tab)</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <p class="ticket__serial" aria-label="Ticket number"><span id="ticket-serial">#00000</span></p>
+        </article>
+      </div>
+
+      <button id="new-registration" class="button button--ghost" type="button">Register another attendee</button>
+    </section>
+  </main>
+
+  <noscript>
+    <p class="container form__status">JavaScript is required to display your ticket. <a href="index.html">Return to the home page</a>.</p>
+  </noscript>
+
+  <!-- Site footer -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <img src="../assets/logo-mark.svg" alt="" width="40" height="40">
+      <p>&copy; 2026 Coding Conf. A fictitious event created for CIT2011 Web Programming, IA#2.</p>
+    </div>
+  </footer>
+</body>
+</html>
